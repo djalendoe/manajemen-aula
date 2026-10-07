@@ -1,0 +1,113 @@
+// Version: 4.0.0
+type AccessControlState__201339279 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__230067015<Principal, UserRole__91647283>
+  };
+type BookingId__572944220 = Nat;
+type BookingInternal__1013072808 =
+  {
+    activityName : Text;
+    createdAt : Timestamp__301639476;
+    date : DateKey__856556366;
+    endMinute : MinuteOfDay__1040410548;
+    hallId : HallId__1013228357;
+    hallName : Text;
+    id : BookingId__572944220;
+    notes : Text;
+    participantCount : Nat;
+    rejectionReason : ?Text;
+    startMinute : MinuteOfDay__1040410548;
+    status : BookingStatus__866642965;
+    user : Principal
+  };
+type BookingInternal__534448549 =
+  {
+    activityName : Text;
+    createdAt : Nat;
+    date : Nat;
+    endMinute : Nat;
+    hallId : Nat;
+    hallName : Text;
+    id : Nat;
+    notes : Text;
+    participantCount : Nat;
+    rejectionReason : ?Text;
+    startMinute : Nat;
+    status : {#dibatalkan; #disetujui; #ditolak; #menunggu};
+    user : Principal
+  };
+type BookingStatus__866642965 =
+  {#dibatalkan; #disetujui; #ditolak; #menunggu};
+type Data__44217153<K, V> = {var count : Nat__227979830; kvs : [var ?(K, V)]};
+type DateKey__856556366 = Nat;
+type HallId__1013228357 = Nat;
+type HallInternal__18478717 =
+  {
+    active : Bool;
+    building : Text;
+    capacity : Nat;
+    description : Text;
+    facilities : [Text];
+    id : Nat;
+    location : Text;
+    name : Text;
+    photoUrl : Text
+  };
+type HallInternal__70681511 =
+  {
+    active : Bool;
+    building : Text;
+    capacity : Nat;
+    description : Text;
+    facilities : [Text];
+    id : HallId__1013228357;
+    location : Text;
+    name : Text;
+    photoUrl : Text
+  };
+type Internal__283199666<K, V> =
+  {children : [var ?Node__204828119<K, V>]; data : Data__44217153<K, V>};
+type Leaf__598469445<K, V> = {data : Data__44217153<K, V>};
+type Map__230067015<K, V> = Map__405889023<K, V>;
+type Map__405889023<K, V> = Map__603270868<K, V>;
+type Map__603270868<K, V> =
+  {var root : Node__204828119<K, V>; var size : Nat__227979830};
+type MinuteOfDay__1040410548 = Nat;
+type Nat__227979830 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__99086632 =
+  {
+    accessControlState : AccessControlState__201339279;
+    bookings : Map__230067015<Nat, BookingInternal__534448549>;
+    halls : Map__230067015<Nat, HallInternal__18478717>;
+    nextBookingId : {var value : Nat};
+    nextHallId : {var value : Nat}
+  };
+type Node__204828119<K, V> =
+  {#internal : Internal__283199666<K, V>; #leaf : Leaf__598469445<K, V>};
+type OldActor__934428609 = {};
+type Timestamp__301639476 = Nat;
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "20261007_000000" : OldActor__934428609 -> NewActor__99086632
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__230067015<Principal, UserRole__91647283>
+    };
+  stable bookings :
+    {
+      var root : Node__204828119<Nat, BookingInternal__1013072808>;
+      var size : Nat__227979830
+    };
+  stable halls :
+    {
+      var root : Node__204828119<Nat, HallInternal__70681511>;
+      var size : Nat__227979830
+    };
+  stable nextBookingId : {var value : Nat};
+  stable nextHallId : {var value : Nat}
+};

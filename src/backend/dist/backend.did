@@ -1,0 +1,232 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type Timestamp = nat;
+type TimeSlot = 
+ record {
+   activityName: opt text;
+   endMinute: MinuteOfDay;
+   occupied: bool;
+   startMinute: MinuteOfDay;
+   status: opt BookingStatus;
+ };
+type Result__1 = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type Result_3 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result_2 = 
+ variant {
+   err: BookingError;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: BookingError;
+   ok: Booking;
+ };
+type Result = 
+ variant {
+   err: AdminError;
+   ok: Booking;
+ };
+type MinuteOfDay = nat;
+type HallWithStatus = 
+ record {
+   hall: Hall;
+   status: HallAvailability;
+ };
+type HallUpdate = 
+ record {
+   active: bool;
+   building: text;
+   capacity: nat;
+   description: text;
+   facilities: vec text;
+   location: text;
+   name: text;
+   photoUrl: text;
+ };
+type HallInput = 
+ record {
+   building: text;
+   capacity: nat;
+   description: text;
+   facilities: vec text;
+   location: text;
+   name: text;
+   photoUrl: text;
+ };
+type HallId = nat;
+type HallFilter = 
+ record {
+   facilities: vec text;
+   minCapacity: opt nat;
+   search: opt text;
+ };
+type HallDetail = 
+ record {
+   hall: Hall;
+   upcomingBookings: vec BookingSummary;
+ };
+type HallAvailability = 
+ variant {
+   available;
+   occupied;
+ };
+type Hall = 
+ record {
+   active: bool;
+   building: text;
+   capacity: nat;
+   description: text;
+   facilities: vec text;
+   id: HallId;
+   location: text;
+   name: text;
+   photoUrl: text;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DaySchedule = 
+ record {
+   date: DateKey;
+   hallId: HallId;
+   slots: vec TimeSlot;
+ };
+type DateKey = nat;
+type DashboardSummary = 
+ record {
+   approvedBookings: nat;
+   pendingBookings: nat;
+   totalHalls: nat;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type BookingSummary = 
+ record {
+   activityName: text;
+   date: DateKey;
+   endMinute: MinuteOfDay;
+   id: BookingId;
+   startMinute: MinuteOfDay;
+   status: BookingStatus;
+ };
+type BookingStatus = 
+ variant {
+   dibatalkan;
+   disetujui;
+   ditolak;
+   menunggu;
+ };
+type BookingInput = 
+ record {
+   activityName: text;
+   date: DateKey;
+   endMinute: MinuteOfDay;
+   hallId: HallId;
+   notes: text;
+   participantCount: nat;
+   startMinute: MinuteOfDay;
+ };
+type BookingId = nat;
+type BookingError = 
+ variant {
+   bookingNotFound: BookingId;
+   conflict;
+   hallInactive: HallId;
+   hallNotFound: HallId;
+   invalidDate;
+   invalidStatus;
+   invalidTimeRange;
+   notAuthorized;
+   notOwner;
+ };
+type Booking = 
+ record {
+   activityName: text;
+   createdAt: Timestamp;
+   date: DateKey;
+   endMinute: MinuteOfDay;
+   hallId: HallId;
+   hallName: text;
+   id: BookingId;
+   notes: text;
+   participantCount: nat;
+   rejectionReason: opt text;
+   startMinute: MinuteOfDay;
+   status: BookingStatus;
+   user: principal;
+ };
+type AdminError = 
+ variant {
+   bookingNotFound: BookingId;
+   invalidStatus;
+   notAuthorized;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result_3);
+  _internet_identity_sign_in_start: () -> (blob);
+  approveBooking: (bookingId: BookingId) -> (Result);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  cancelBooking: (bookingId: BookingId) -> (Result_2);
+  createBooking: (input: BookingInput) -> (Result_1);
+  createHall: (input: HallInput) -> (Hall);
+  deactivateHall: (id: HallId) -> (bool);
+  execute: (qJson: text) -> (Result__1) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDashboardSummary: () -> (DashboardSummary) query;
+  getDaySchedule: (hallId: HallId, date: DateKey) -> (opt DaySchedule) query;
+  getHall: (id: HallId) -> (opt HallDetail) query;
+  isCallerAdmin: () -> (bool) query;
+  listAllBookings: () -> (vec Booking) query;
+  listHallBookings: (hallId: HallId, from: DateKey, to: DateKey) ->
+   (vec Booking) query;
+  listHalls: (filter: HallFilter) -> (vec HallWithStatus) query;
+  listMyBookings: () -> (vec Booking) query;
+  rejectBooking: (bookingId: BookingId, reason: text) -> (Result);
+  schema: () -> (text) query;
+  updateHall: (id: HallId, input: HallUpdate) -> (opt Hall);
+}

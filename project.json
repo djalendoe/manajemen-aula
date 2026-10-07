@@ -1,0 +1,21 @@
+{
+  "overview": "Aplikasi manajemen aula multi-ruangan untuk melihat katalog aula, mengecek jadwal, mengajukan pemesanan, dan mengelola persetujuan lewat panel admin.",
+  "features": [
+    "Katalog aula dengan foto, kapasitas, lokasi, dan fasilitas",
+    "Pencarian dan filter aula berdasarkan kapasitas dan fasilitas",
+    "Jadwal pemakaian dan ketersediaan tiap aula",
+    "Pengajuan pemesanan dengan deteksi bentrok jadwal",
+    "Daftar pemesanan pribadi dengan status dan pembatalan",
+    "Panel admin untuk menyetujui atau menolak pengajuan",
+    "Pengelolaan data aula oleh admin",
+    "Dashboard ringkasan aula dan pemesanan"
+  ],
+  "category": "booking-management",
+  "tags": [
+    "hall-booking",
+    "scheduling",
+    "admin-panel",
+    "facility-management"
+  ],
+  "last_updated": "2026-10-07T05:21:59.699Z"
+}
